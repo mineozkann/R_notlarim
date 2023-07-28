@@ -1,0 +1,233 @@
+# R'DA MATEMATİKSEL İŞLEMLER
+
+x <- 4 
+y <- 18
+x - y
+
+z = 2**5   #kök alma
+z
+
+x / y      #ondalıklı değerler noktayla gösterilir
+x * y
+x + y
+
+sqrt(x)    #karekök alma
+
+#VEKTÖRLERDE MATEMATİKSEL İŞLEMLER
+
+x <- c(1,3,5,6,7,54,86)
+> x + 5
+x
+
+x ** 2
+x / 2
+
+x <- c(1,3,5,6,7,54)
+x + 5                  #tüm elemanlara x ekler (geçici)
+
+x ** 2
+
+y <- x**2              #kalıcı işlemler
+y
+
+x + y                  #eleman sayıları eşit
+                       #aynı indistekileri toplar
+x * y
+
+x1 <- c(1,3,5,7)       #4 2'ni katı
+x2 <- c(2,4)           #x2 bir tur daha döner
+x1 + x2
+
+x3 <- c(1,2,3)         #3 2'nin katı değil sağlıklı bir toplama olmaz
+x4 <- c(5,6)
+x3 + x4
+
+
+#VEKTÖR UZUNLUKLARI
+
+x <- c(1,2,3,4,5,6)
+
+length(x)          #vektör uzunluğunu verir
+
+x[length(x)]       #sonuncu elemanı veriri
+
+len <- length(x)   #sonuncu değeri atarız
+
+x[len-1]           #sondan önceki değerlerini bulmamızı sağlar
+
+x[len-2]
+
+#VEKTÖR MİN MAX DEĞERLERİ
+
+min(x)
+max(x)
+
+
+#R'DA VEKTÖR İNDEXİNİN BULUNMASI
+
+x <- c(1,4,64,76,37,12)
+
+y = 5
+y == 5          #eşit mi sorgusu TRUE cevabını alırız
+
+x == 1          #1. indis için True diğerleri False         
+
+which(x == 0)   #integer(0) alırız çinki o eleman yok
+
+which(x == 1)   #1 çıktısı
+#Which vektörde true sorgusu yapıyor,
+#True olanların indisini veriyor
+
+t <- c(1,3,3,1,1)
+
+which(t == 3)   #2 3 çıktısı alırız
+
+bir = which( t == 1 )
+bir             #birin olduğu indisleri basar
+
+t[bir]          #3 tane 1 çıktısı alırız, bir sayısı kadar basar
+
+t[t == 1]       #3 tane 1 çıktısını alırız
+#1'lerin olduğu indisteki elemanları ver yani 1'leri
+
+
+#VEKTÖRLERDE BÜYÜKTÜR KÜÇÜKTÜR
+
+x <- c(1,3,5,5,26,73,87)
+
+x < 10           # T T T T F F F çıktısını alırız
+x >= 5           # F F T T T T T
+
+x != 1           # F T T T T T T 
+#eşit değil mi sorgusu 1 olanlar için F alırız
+
+x[x <= 10]       #10'dan küçük eşit olanları çağırma
+
+#VEKTÖRLERDE BÜYÜK KÜÇÜK EŞİT 
+#İNDİSLERİNİ BULMA
+
+x <- c(2,43,64,76,86,21,97)
+
+which(x > 60)       #60'tan büyük değerlerin indislerini verir
+which(x <= 64)      #64 dahil
+
+
+#KARAKTER TÜRLERİ İÇİN BÜYÜKTÜR KÜÇÜKTÜR
+
+'B' == 'b'          #F büyük küçük hassasiyeti var
+'b' < 'a'           #FALSE
+'b' > 'a'           #TRUE
+
+'AS' > 'AB'         #TRUE
+
+'B' < 'b'           #FALSE küçü harf büyükten önce gelir
+
+#WHİCH VEKTÖRLERDEKİ GİBİ KARAKTERLERDE DE GEÇERLİDİR
+
+
+#ARDIŞIK DEĞERLERDEN OLUŞAN VEKTÖR OLUŞTURMA
+
+1:14           #1'den 14'e (1 14 dahil) seri oluşturur
+
+#SEQ FONKSİYONU
+
+seq(from = 5, to = 12)    #5 başlangıç 12 bitiş
+seq(8)                    #1'den 8'e kadar
+seq(3,6)                  #3,4,5,6
+
+#data frame'lerde silinen satır isimini düzeltme
+
+df <- data.frame('a' = c(32,56,16), 'b' = c(1,2,3))
+df
+
+df <- df[-2, ]            #2. satırı sildik
+#1. 32 1
+#3. 16 3    
+#gibi bi görüntü oluştu bunu düzeltmek için serilerden yararlarınız
+
+row.names(df)             #1,3 bize satırların ismini verir
+
+uz <- length(df)          #data frame'in uzunluğunu alırız (df$a olabilir)
+uz                        #2
+
+#sırayı düzeltmek için
+
+row.names(df) <- seq(from=1 , to=uz)    
+#seq fonksiyonuyla sırayı düzenleriaz
+df
+
+
+#BELİRLİ Bİ SAYIYLA ARTAN ARDIŞIK SAYILAR
+
+seq(from=2 , to=34 , by=3)     #by artış değeri
+seq(2 , 65 , 3)
+
+seq(from=1 , to=10, length.out = 20)     
+#bu fonksiyonla eleman sayısını ayarlayabiliriz
+
+
+#VEKTÖR DEĞERLERİNİN KARIŞTIRILMASI
+
+x <- seq(100 , 300 , 10)
+x                              #sıralı dizme
+
+sample(x)                      #x'i karıştırır
+sample(x , replace = TRUE)     #değerleri birden fazla kullanır
+
+#her sample çalıştırdığımızda farklı sonuç verir
+
+
+#VEKTÖRLERDEN RASGELE ÖRNEKLEM ALIMI
+
+x <- seq(10 , 100 , 5)
+x
+
+sample(x , size = 3)          #rasgele 3 eleman çekme
+
+set.seed(200) 
+sample(x , size = 1)          #set.seed'le hep aynı sonucu alırız
+
+set.seed(135)
+sample(x , size = 1)          #her değer için ayrı
+
+length(x)                     #19 elemanı var
+
+sample(x , size = 25)         #hata verir
+sample(x , 25 , replace = T)  #doğru
+#elemanları birden fazla kullanmaya izin verdiğimde sonuç alırım
+
+
+#TEKRAR EDEN DEĞERLERDEN SERİ OLUŞTURMA
+
+rep(4, 3)         #4 4 4
+
+x <- c(23,53,75,12,94)
+x
+
+rep(x , 3)        #karıştırmadan x'i 3 kere tekrar yazar
+
+rep(x , each=2)   #23 23 53 53 ... gibi yazar
+
+#böyle seri yapıp sample ile karıştırabiliriz
+
+#VEKTÖRLERİN BÜYÜKTEN KÜÇÜĞE VS SIRALAMA
+
+x <- c(23,51,65,75,27,1)
+
+sort(x)                   #küçükten büyüğe sıralama
+sort(x, decreasing = T)   #büyükten küçüğe sıralama
+
+sort(x, index.return= T)  #alt satırda indislerini verir
+#liste formunda sıralar
+
+a <- sort(x , index.return= T)
+a[['x']]                  #küçükten büyüğe sıralanmış formu
+a[['ix']]                 #indislerini verir
+a[['ix']][2]              #2.nin indisini ver
+
+y <- c(1,2,3, NA, NA)
+
+sort(y)                   #NA değerlerini almaz
+sort(y, na.last= T)       #NA değerlerini en sona yazar
+  
+#sort fonksiyonu karakterlerde de çalışır
