@@ -1,0 +1,77 @@
+
+
+# Integer(Tam sayı)
+# Numeric ( Reel, virgüllü)
+# Character (String, Nominal)
+# Factor (Ordinal)
+# Logical (Mantıksal T,F) 
+
+#FAKTOR VERİ TİPİ
+
+f <- factor(c('A' , 'B' , 'C'))
+
+#LOGICAL VERİ TİPİ
+
+l <- c(T,T,F,F,T)
+
+
+#Veri türü kontrolü
+
+is.factor(f)         #TRUE 
+is.logical(l)        #TRUE
+
+x <- c(1,2,3,4)
+
+is.integer(x)        #FALSE 
+is.numeric(x)        #TRUE
+#r ilk olarak numeric alır
+
+#Veri türü dönüşümleri
+
+as.integer(x)        #kalıcı değil
+class(x)             #numeric
+   
+y <- as.integer
+class(y)             #integer
+
+x <- c(1,2,3,4)
+
+class(x)             #numeric
+
+y <- as.character(x)
+class(y)             #character
+  
+y                    #"1" "2" "3" "4"
+
+x <- c(1,1,0,0,1)
+class(x)             #numeric
+
+xL <- as.logical(x)
+xL                   #1'leri T 0'ları F algılar
+  
+y <- c(21,45,17,63,0)
+
+yL <- as.logical(y)
+yL                   #0 dışındaki değerleri T algılar
+
+#character değerlerini logical yapamaz
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
