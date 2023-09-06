@@ -1,0 +1,375 @@
+
+###DATA FREMA'LER
+
+#DATA FRAME BOYUTLAR
+
+df <- data.frame('A' = c(1,2,3,4,5),
+                 'B' = c(8,7,6,5,4),
+                 'C' = c('a','b','c','d','e'))
+df
+
+length(df$A)  #5
+
+nrow(df)          #5 satırları sayar
+
+length(df)        #3 sütunları sayar
+
+ncol(df)          #3 sütunları sayar
+
+dim(df)           #5 3 satır ve sütun sayısını verir
+
+
+##DATA FRAME SORGU İŞLEMLERİ
+
+#rasgele dağılan örneklemlerle işlemler yapalım
+
+df <- data.frame('a' = rnorm(n = 100 , mean = 3 , sd = 2),
+                 'b' = rnorm(100 , 5, 7),
+                  'c' = rnorm(100 , 20 , 3))
+df
+View(df)
+
+df$a < 2            #T F li çıktı alırız
+
+which(df$a < 2)     #indexlerini verir
+
+x <- which(df$a < 2)
+x
+
+df[x, ]               #a'nın 2den küçük olan değerlerini
+                      #tüm sütunlarla beraber verdi
+
+df[x, c('b', 'c')]          #a'nın 2den küçük olduğu
+                            #b ve c sütunlarını verir
+ 
+
+mean(df$b)           #4.65
+
+which(df$b < mean(df$b))  #b'nin hangi değerleri
+                          #kendi ortalamasından küçük
+
+y <- which(df$b < mean(df$b))
+y
+
+df[y, ]
+df[y, c('a','c')]
+
+View(df[y , c('a','c')])  #b'nin kendi ortalamasından küçük
+                          #olan değelerinin a ve c değerleri
+
+
+
+#SUBSET() ALT KÜME FONKSİYONU
+
+#R'daki hazır veri setlerini kullanacağız
+
+data()
+#bu verilerden CO2 olanı çağıralım
+
+CO2
+
+View(CO2)
+
+names(CO2)   #değişken isimlerimizi kontrol edelim
+
+subset(CO2 , subset = (uptake > 30 & Type == 'Quebec') )
+
+#subset fonk içinde önce verilerimizi alacağımız yeri seçip
+#yine subset içinde alt başlıklarla alt kümemizi oluşturuyoruz
+
+subset(CO2 , subset= (uptake > 30 & Type == 'Quebec'),
+              select = c(Treatment , conc))
+
+#select ile de hangi değişkenleri alacağımızı seçebiliriz
+#üstteki örnekteki gibi yazmazsak hepsini alır
+
+
+subset(CO2 , subset = (uptake > 30 | Type == 'Quebec') )
+
+#araya & koyduğumuzda 've' 
+#araya | koyduğumuzda 'veya' algılar
+
+
+##SUBSET'TE İÇ İÇE KOŞULLAR
+
+subset(CO2 , subset = (Type == 'Quebec' | Treatment ==  'nonchilled') &
+                      (uptake > 30 & uptake < 35)  )
+
+#uptake 30 35 arasında olan veriler içinden 
+#type quebec olanlar veya treatment nonchilled olanlar
+
+
+##SATIR VE SÜTUN BAZINDA ORTALAMALAR
+
+data()
+
+iris
+
+#hazır veri setimizi çağırdık
+
+View(iris)
+
+#rowMeans satır satır ortalama hesaplar
+#tüm değerleri numeric olmalı
+
+rowMeans(iris)          #numeric değil hatası aldık
+
+rowMeans(iris[1:4])     #5. character olduğu için
+
+m <- rowMeans(iris[1:4])
+
+#yeni veri seti ekleme
+
+iris['ort'] <- m
+
+View(iris)              #ort olarak yeni sütun eklendi
+
+#colMeans sütun bazında ortalama hesaplar
+
+colMeans(iris)          #yine numeric değil hatası alırız
+
+colMeans(iris[1:4])     #5. sütun characterdi
+
+#sütun ortalamalarını ayrı bir satır olarak eklemek istersek
+#character olanları da doldurmalıyız yoksa NA olarak kalır
+
+colMeans(iris[1:4] , na.rm = T)
+#değerlerim içinde NA değer varsa yoksaymalıyız 
+
+
+
+##GRUPLAR BAZINDA HESAPLAMALAR
+
+View(iris)
+
+#bu veri setimizde character olan species'deki 
+#çeşitleri gruplandıracağız(uzun yol)
+
+setosa <- which(iris$Species == 'setosa')
+
+versicolor <- which(iris$Species == 'versicolor')
+
+virginica <- which(iris$Species ==  'virginica')
+
+meanSetosa <- mean(iris[setosa , c('Sepal.Length')])
+meanSetosa
+
+#Setosa alt kümesinde Sepal.Length sütununun ortalaması
+
+meanVersicolor <- mean(iris[versicolor , c('Sepal.Length')])
+meanVersicolor
+
+meanVirginica <- mean(iris[virginica , c('Sepal.Length')])
+meanVirginica
+
+#bu işlemlerin kısa yolu
+
+aggregate(iris , by = list(iris$Species) , FUN = mean)
+
+#by içinde list olarak hangisine göre gruplanacağını seçeriz
+#FUN ile de ne hesaplayacağımız seçeriz
+
+#species değerleri characekter olduğundan hata verir
+#ama yine de hesaplama sonuçlarını verir
+
+aggregate(iris[1:4] , by = list(iris$Species) , FUN = mean)
+
+#hesaplamaya species'i dahil etmedik 
+
+aggregate(iris[1:4] , by = list(iris$Species) , FUN = sd)
+
+#standart sapmalar için
+
+#FUN ile hesaplattıklarımız R'ın hesapladığı fonksiyonlar
+#kendi oluşturduğumuz fonksiyonları da FUN'la hesaplatabiliriz
+
+#DATA FRAME BETİMSEL İSTATİSTİK ÖZET BİLGİLERİ 
+
+View(iris)
+
+summary(iris)
+#numeric değerlerde min max çeyreklikleri verir
+#characterlerde tekrar eden değerlerin sayısını verir 
+
+View(summary(iris))
+
+str(iris)       #num, int, factor gibi bilgileri verir
+#
+
+head(iris)             #ilk 6 satırı
+
+head(iris , n = 10)    #ilk 10 satırı
+
+tail(iris)             #son 6 satırı
+
+tail(iris , n = 10)    #son 10 satırı
+
+
+#MERGE() İLE İKİ DATA FRAME BİRLEŞTİRME
+
+merge_df = merge(Demografik , Transactions ,
+                  by.x = "ID" , by.y = "CUSTOMER_ID")
+
+View(merge_df)
+
+#birleştirme yapmak için ortak bir nokta gerekiyor
+#bu örnekte müsteri ID'si
+
+#müşteri ID'lerine göre birleştirme yapacağız
+#iki data framede isimleri farklı olduğundan by.x ve by.y
+#olarak belirtiriz. aynı olsalardı by dememiz yeterliydi
+#yeni adlandırmayı x'e göre yapar
+
+#ID isimlerini aynı yaparak da sadece by kullabiliriz
+
+names(Transactions)[2] <- 'ID'
+
+merge_df2 = merge( Demografik , Transactions , by = 'ID')
+View(merge_df2)
+
+
+#DATA FRAME DEĞİŞKEN İSTATİSTİKLERİ
+
+mean(singapore$price)                  #NA 
+
+any(is.na(singapore$price))            #TRUE 
+#NA değeri olduğundan mean hesaplayamadık
+
+mean(singapore$price , na.rm = T)          #168
+#bu şekilde NA değerlerini etkisz hale getirdik;
+
+sd(singapore$price , na.rm = T)             #340
+
+median(singapore$price , na.rm = T)         #124
+
+#median > mean olduğundan sağa çarpık
+#sd meanden oldukça büyük veriler geniş yayılmış
+
+hist(singapore$price)
+#daha detaylı histogram grafiği için aralık seçiyorum
+hist(singapore$price[singapore$price < 800])
+
+var(singapore$price , na.rm = T)       #115660
+
+min(singapore$price , na.rm = T)       #0 
+
+max(singapore$price , na.rm = T)       #10000
+
+quantile(singapore$price , na.rm = T)
+     
+
+#DEĞİŞKEN VERİ TÜRÜ DÖNÜŞÜMÜ
+
+class(singapore$name)          #cvs otomatik factör alır
+                              #charactere çevirmemiz işlem kolaylığı sağlar
+
+singapore$name <- as.character(singapore$name)
+
+singapore['name']
+
+class(singapore['name'])                 #data frame
+
+as.character(singapore['name'])
+#hatalı dönüştürme olur tüm elemanlar  bir sayılır
+#data frame'ler charactere sağlıklı dönüşmez
+
+class(singapore[ , c('name')])           #character
+
+singapore[ ,c('name')] <- as.character(singapore[ ,c('name')])
+
+singapore[ ,c('name')] <- as.factor(singapore[ ,c('name')])
+
+class(singapore$id)                      #factor
+#numeric yapmak için: factör > character > numeric
+#direct numeric yapıldığında levelleri alır
+
+singapore$id <- as.character(singapore$id)
+
+singapore$id <- as.numeric(singapore$id)
+
+singapore$id
+
+class(singapore$room_type)
+
+table(singapore$room_type)
+#room_type'da hatalı sayısal veriler var bunları temizlemeliyiz
+
+hata<- which( singapore$room_type == '110' |
+             singapore$room_type == '1200' |
+             singapore$room_type == '294' |
+             singapore$room_type == '299' |
+             singapore$room_type == '31' |
+             singapore$room_type == '40' |
+             singapore$room_type == '50' |
+             singapore$room_type == '60' |
+             singapore$room_type == '74' |
+             singapore$room_type == '75' |
+             singapore$room_type == '750' )
+
+singapore <- singapore[ -hata , ]
+
+table(singapore$room_type)
+
+
+##DATA FRAME VE APPLY FONKSİYON GRUPLARI
+
+View(iris)
+
+apply(iris[1:4] , MARGIN = 1 , FUN = mean)
+
+#apply fonfsiyonunda ilk çalışacağımız df seçeriz
+#margin 1 olduğunda satır 2 olduğunda sütun işlemleri yapar
+#FUN ile de yapacağımız işlemi seçeriz
+
+apply(iris[1:4] , MARGIN = 1 , FUN = sd)
+
+apply(iris[1:4] , MARGIN = 1 , FUN = sum)
+
+apply(iris[1:4] , MARGIN = 2 , FUN = mean)   #sütunlar bazında
+
+apply(iris[1:4] , MARGIN = 2 , FUN = max)
+
+
+lapply(iris[1:4], FUN = mean)
+
+#lapply de apply ile benzer fakat lapply listelerde işlem yapar
+#sadece sütunlar bazında işlemler yapar
+
+
+##WİTH() FONKSİYONU
+
+View(singapore)
+
+names(singapore)
+
+attach(singapore)
+room_type           #bu şelikde direkt bastırırız
+
+#attach fonksiyonu df içindeki değişkenleri vektör olarak dışarı çıkarır
+#hem df içerisinde hem de ayrı vektör olarak bulunur
+
+class(room_type)    #character
+
+#birden fazla df ile çalışıldığında isimlerin çakışma durumundan dolayı
+#tek df ile çalışıldığında kullanışlı olur
+
+detach(singapore)
+
+#değişkenleri yerlerine koyar ayrı değil artık
+
+#attach edildiği kafar detach edilmeli
+
+with(singapore , print(room_type))
+
+with(singapore , {
+                  x <- mean(price , na.rm = T)
+                  y <- x - 10
+                  print(y)
+})
+
+#with içine komutlar yazılacaksa {} içine yazılmalı 
+
+
+
+
+
