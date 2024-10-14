@@ -1,0 +1,214 @@
+##VERİ GÖRSELLEŞTİRME
+
+#HİSTOGRAM GRAFİĞİ
+##HİSTOGRAM GRAFİĞİ
+
+hist(iris$Sepal.Length  , 
+     main = "GRAFİK" ,      #Başlık
+     xlab = "Değerler",     #Eksen isimlerini değiştirme
+     ylab = "Frekans" ,
+     breaks = 30 ,          #Kırılmaları belirler
+     xlim = c(0,10) ,       #limitleri belirleme
+     ylim = c(0,20) )     
+
+
+hist(iris$Sepal.Length ,
+     col = "pink")         #kutu grafiklerini renklendirir 
+     
+hist(iris$Sepal.Length, 
+     prob = T)               #y eksenini yoğunluk olarak değiştirir
+     
+
+density(iris$Sepal.Length)  #verilerin istatistiklerini ve 
+                            #standartlaştırılmış hallerini verir
+
+lines(density(iris$Sepal.Length) ) #çizilmiş olan histograma 
+                                   #içindeki bilgilere göre çizgi çizer
+
+lines(density(iris$Sepal.Length , 
+              adjust=2 ))            #adjust ile kıvrım azaltma oranıdır
+                                     #arttıkça detay azalır
+
+lines(density(iris$Sepal.Length),
+      col = 'red',      #çizginin rengi
+      lwd=3)            #çizginin kalınlığı
+
+
+##SAÇILIM DİAGRAMLARI
+
+View(airquality)
+
+plot(airquality$Ozone , 
+     bty = "L",              #üst ve sağ taraftaki çizgiyi kaldırır
+     type = 'h' )            #histogramdaki gibi çizgiler verir
+
+     #type = 'l' ise birbirine yakın noktalara çizgi çizer
+     #type = 'b' ise hem noktalar hem çizgiler
+     
+plot(airquality$Ozone , 
+     airquality$Temp)   # iki değişkenin dağılım grafiği
+                        # eşit uzunlukta olmalılar
+
+plot(airquality$Ozone ,airquality$Temp,
+     pch = 19 ,          #içi dolu noktalar
+     col = 'orange')     #noktaların renkleri
+
+
+levels(as.factor(airquality$Month))  #faktörleştirip levellerine bakmak
+
+plot(airquality$Ozone ,airquality$Temp, pch = 19 ,
+     col = c('blue' , 'orange', 'red' , 'green' , 'brown')[as.factor(airquality$Month)]
+     #aylara göre renklendirme 
+
+     
+#Grafiğe hangi noktaların hangi levelleri gösterdiğini anlatan kutu koyulması
+legend(x = 'topright' ,         #eksenin sağ üst tarafı
+       legend = levels(as.factor(airquality$Month)),        #levellerin tanımlanması
+       col = c('blue' , 'orange', 'red' , 'green' , 'brown'),    #renkler
+       pch=19)                                                #noktanın dolgulu olması
+     
+plot(airquality$Ozone ,airquality$Temp,
+     pch = 19 ,          
+     col = c('blue' , 'orange', 'red' , 'green' , 'brown')[as.factor(airquality$Month)],
+     cex = 1 ,             # noktaların boyutunu ayarlamayı sağlar
+     ) 
+ 
+
+#Noktaların boyutlarının başka bir değişkene göre büyüklüğünün ayarlanması
+   
+plot(airquality$Ozone ,airquality$Temp,
+     pch = 19 ,          
+     col = c('blue' , 'orange', 'red' , 'green' , 'brown')[as.factor(airquality$Month)],
+     cex = airquality$Wind/10)        
+
+#Bilgilendirme kutunun verilmesi
+legend(x ='topright' , 
+       legend = c('düşük' , 'orta' , 'yüksek'),  #leveller belirlenir
+       pt.cex = c(0.2 , 0.9 , 2),                #aralıkların belirlenmesi veriye göre
+       pch = 19 ,
+       inset = c(-0.3 , 0.65))          #konumun ayarlanması
+
+
+#ilişki doğrusu çizilmesi 
+
+plot(airquality$Ozone ,airquality$Temp , pch = 19)
+
+abline( lm( airquality$Temp ~ airquality$Ozone) ,      # y ~ x
+        lwd = 3 )                                      #kalınlık 
+
+#LOWES eğrisinin çizilmesi
+
+airquality <- na.omit(airquality)
+
+lowess(airquality$Ozone , airquality$Temp)
+
+
+plot(airquality$Ozone ,airquality$Temp , pch = 19)
+
+lines(lowess(airquality$Ozone , airquality$Temp))
+#bir ilişki eğrisi çizilmesini sağlar
+
+
+
+View(mtcars)
+
+height <- table(mtcars$cyl)   #kategorik değişkenlerde ağırlıkları bulmaya yarar
+
+barplot(height ,      #ağırlık değerlerini atarız
+        names.arg = c("4 cyl" , "6 cyl", "8 cyl"),  #kategorileri adlandırma
+        col = 'pink',                               #kutuların içini renklendirme
+        border = 'pink',                            #kutuların çerçevesini renklendirme
+        horiz = T  )                                #grafiği yan yatırma                                    
+
+
+#sayısal değişkeni gruplandırma ve bar grafiği oluşturma
+
+quantile(mtcars$mpg)  #kategorik değişkenin çeyreklikleri
+
+
+grup_f <- function(x){
+  
+  cey <- quantile(mtcars$mpg)
+  result <- character(length(x))
+  
+  grup_1 <- which(x <= cey[2])
+  grup_2 <- which(x <= cey[3] & x > cey[2] )
+  grup_3 <- which(x <= cey[4] & x > cey[3] )
+  grup_4 <- which(x <= cey[5] & x > cey[4])
+  
+  result[grup_1] <- 'grup 1'
+  result[grup_2] <- 'grup 2'
+  result[grup_3] <- 'grup 3'
+  result[grup_4] <- 'grup 4'
+  
+  return(result)
+}
+
+#burada çeyrekliklere göre aralıklar belirlenir ve yazdırılır
+
+grup_f(mtcars$mpg)
+
+barplot(table(grup_f(mtcars$mpg)))
+
+
+#YIĞIN BAR GRAFİKLERİ
+
+t <- table(mtcars$gear , mtcars$cyl)  #ikili frekans değeri
+
+barplot(t)
+
+
+#PASTA GRAFİĞİ
+
+table(mtcars$gear)
+yuz <- prop.table(table(mtcars$gear))  #yüzdelikler
+
+
+names <- c('3 vites' , '4 vites' , '5 vites')
+t <- sprintf("%s = %s%3.0f" , names ,"%", as.numeric(yuz)*100)
+##sprintf(): Bu fonksiyon, names vektöründeki vites türleri ile yüzde değerlerini formatlar ve 
+##t değişkenine atar. Her bir yüzde değeri, as.numeric(yuz)*100 ile yüzdelik biçime dönüştürülür ve 
+##3.1f formatında (üç haneli, bir ondalıklı) yazılır.
+
+
+pie(yuz,
+    main='pasta grafiği',
+    labels = t,
+    col = c("pink" , "blue" , "green"),
+    init.angle = 180,                            #girilen açıya göre döndürme
+    border = "red",                              #çizgilerin renkleri
+    radius=1.1                                   #grafiğin çapını büyütme
+    
+    )
+
+
+
+##KUTU GRAFİĞİ (BOX PLOT)
+
+boxplot(mtcars[,c("drat" , "wt")],
+        names = c("Dtar değişkeni" , "Wt değişkeni"),
+        col= c("pink", "lightblue"),
+        range = 0.5 ,                   #oranı değiştirir ayrıkı değerler değişir
+        outline = F )                   #aykırı değerleri grafikten kaldırma
+
+
+boxplot(mtcars$mpg ~mtcars$gear)     
+#bağımlı değiş ~ bağımsız değişken formatında
+#bağımsız değişkenin kategorilerine göre bağımlı değilkenin kutu grafiği
+
+
+boxplot(mtcars$mpg ~ mtcars$gear*mtcars$cyl)
+#iki bağımsız kategorik değişken
+#bağımsız değişkendeki kategorileri çaprazalayarak tüm durumların kutu grafiği
+
+
+
+#HEATMAP GRAFİĞİ
+
+#heatmap için verimizin matris formatında olması lazım
+mtcars_matris <- as.matrix(mtcars)
+
+heatmap(mtcars_matris)     #düzgün bir sonuç çıkmaz değişkenler standartlaştırılmalı
+
+heatmap(mtcars_matris , scale = "column") 
+
