@@ -1,0 +1,278 @@
+
+##BERNİOULLİ DAĞILIMI
+
+install.packages("Rlab")
+library(Rlab)
+
+dbern(x = 0 , prob = 0.6 )  #0.4
+#prob başarılı olma olasılığı
+#x durumlar 0 veya 1 
+
+dbern(x = 1 , prob = 0.2)   #0.2
+
+#0 başarısızlık
+#1 başarı durumu 
+
+#kümülatif olasılık
+pbern(q = 1 , prob = 0.7,
+      lower.tail = TRUE)   #girilen değer ve daha küçüklerin olasılığını toplar
+#sonuç 1 olur
+
+pbern(q = 0 , prob = 0.7,
+      lower.tail = TRUE)   #0.3
+
+pbern(q = 1 , prob = 0.3,          #0
+      lower.tail = FALSE)  #girilen değerden yukarıdaki değerlerin olasılığını toplar
+
+
+qbern(p = 0.5 , prob = 0.7)  #1
+#olasılığın 0.7 olduğu bir deneyde 0.5 olasılıkla 1 veya daha az sonucunu elde edebilirim
+
+qbern(p = 0.2 , prob = 0.7)  #1
+
+
+#rasgele bernioulli dağılımı oluşturma
+rbern(n = 50 , prob = 0.7)
+
+
+
+
+###BİNOM DAĞILIMI 
+
+dbinom(x = 5 ,  size = 10 , prob = 0.7)    #0.10
+
+#0.7 olasılığın olduğu durumda 10 denemenin 5'inin başarılı gelme olasılığı
+
+pbinom(q = 5 , size = 30 , prob = 0.7)
+#5 ve 5'ten daha az defa başarılı olma olasılığı
+
+pbinom(q = 16 , size = 30 , prob = 0.7,
+       lower.tail = F)
+#16'dan daha yüksek 
+
+
+
+pbinom(q = 9 , size = 30 , prob = 0.25,   #0.19
+       lower.tail = F)
+#olasılık 0.25 iken 30 denemeden en az 10 ve daha fazla başarılı olma olasığılı
+
+
+
+#girilen olasılık değerine göre kaç kere başarılı olunacağını hesaplama
+
+qbinom(p = 0.99 , size = 30 , prob = 0.7, lower.tail = T) 
+#Binom dağılımında, başarı olasılığı %70 olan 30 denemede, 
+#kümülatif olasılık %99'a ulaşmak için en az 26 başarılı deneme gereklidir. 
+#Yani, 30 denemenin en az 26'sında başarı elde etme olasılığı %99 veya daha fazladır.
+
+qbinom(p = 0.7 , size = 30 , prob = 0.25,    #9
+       lower.tail = T)
+
+#9 ve 9'dan daha az durumların olasılıkları 0.7 başarı olasılığını verir
+
+
+
+qbinom(p = 0.7 , size = 30 , prob = 0.25,    #6
+       lower.tail = F)
+
+#6'dan daha fazla durumların olasılıklarının toplamı 0.7 verir
+
+
+#rasgele dağılan binom dağılımı oluşturma
+
+rbinom(n = 50 , size = 30 , prob = 1/4)
+
+
+
+
+###POİSSON DAĞILIMI
+
+#bir kavşakta 1 saatte 15 araba geçiyor olmakta
+
+#1 saatte 20 araba geçme olasılığı
+dpois(x = 20 , lambda = 15)             #0.04
+
+
+dpois(x = 15 , lambda = 15)             #0.1
+
+plot( 1:30 , dpois(x = 1:30 , lambda = 15 ))   #grafiği çizdirmek
+lines(dpois(x = 1:30 , lambda = 20 ))          #lamdası 20 olan çizgi çizdirmek       
+
+
+#kümülatiff
+
+ppois(q = 10 , lambda = 15, lower.tail = T)    #0.11
+#10 ve 10dan daha az araba geçme olasılıklarının toplamı
+
+ppois(q = 20 , lambda = 15, lower.tail = F)    #0.08
+#20'den daha fazla araba geçme olasılığı 
+
+ppois(q = 30 , lambda = 20 , lower.tail = F)   #0.01
+
+
+#olasılık değerine göre x elde etme 
+
+qpois(p = 0.8 , lambda = 15 )   #18
+#18 ve 18'den küçüklerin kümülatif toplamı 0.8'dir
+
+qpois(p = 0.8 , lambda = 15 ,
+      lower.tail = F)
+#12'den daha fazla araba geçme olasılıklarının toplamı 0.8'dir
+
+#rasgele veri üretimi
+
+rpois(n = 50 , lambda = 20)
+
+
+
+
+
+###HİPERGEOMETRİK DAĞILIM
+
+#yerine konmadan yapılan n seçimdeki başarılı olma olasılığı
+#her deneme sonrası olasılık oranı değişecektir
+
+#N : popülasyon büyüklüğ
+#n : yapılacak seçim sayısı
+#D : deneydeki toplam başarılı olma sayısı
+#x : seçimler sonrası elde edilen başarılı seçim sayısı
+
+#iskambil örneği 26 kırmızı 26 siyah kart
+#10 seçimde 4 tane kırmızı gelme olasılığı 
+dhyper(x = 4 , m = 26 , n = 26 , k = 10)      #0.21
+
+# m kitlede başarılı olan durum sayısı
+# n kitlede başarısız olan durum sayısı
+
+
+plot( 1:50 , dhyper(x = 1:50 , m = 26 , n = 26 , k = 50) )
+
+#kümülatif
+
+phyper(q = 6 , m = 10 , n = 30 , k = 15)
+#15 seçimde 6 ve daha az tanesinin istenen gelme olasılığı 0.98
+
+phyper(q = 6 , m = 10 , n = 30 , k = 15,
+       lower.tail = F)
+#15 seçimde 6'dan daha fazla istenen durum gelme olasılığı 0.01
+
+
+#girilen olasılığa göre seçim sayısı öğrenme
+
+qhyper(p = 0.5 ,  m = 10 , n = 30 , k = 15)    #4
+#4 ve 4'ten daha az durumların olasılık toplamı 0.5'tir
+
+
+#rasgele hipergeometrik dağılım oluşturma
+
+rhyper(nn = 50 , m = 26 , n = 26, k = 10)
+#nn kaç tane veri üretileceği
+
+
+
+
+###UNİFORM DAĞILIM 
+
+#n farklı durumun eşit olasılıkla meydana gelmesidir
+#örneğin zar atma deneyi
+#hem kesikli hem sürekli olabilir
+# 1/(max-min)
+#rasgele sayı üretiminde de bu dapılım kullanılır
+
+
+dunif(x = 5 , min = 0 , max = 10 )    # 0.1
+#tüm durumlar için 0.1 olur
+
+
+plot( 1:40 , dunif(x = 1:40 , min = 1 , max = 40 ))
+#düz bir eğri elde edilir
+
+punif( q = 5 , min = 0 , max = 10 )   #0.5
+
+punif( q = 7 , min = 0 , max = 10,
+       lower.tail = F)                #0.3
+
+qunif( p = 0.4 , min = 0 , max = 10 )  #4
+
+
+#rasgele uniform dağılım oluşturma
+d <- runif(n = 10 , min = 0 , max = 10 )
+
+round(d)    #ondalıkları kaldırarak kesikli forma dönüştürme
+
+
+
+
+###ÜSTEL DAĞILIM
+
+#belirli bir olay gerçekleşene kadar geçen süreyle alakalı bir dağılımdır
+#örneğin 10 dakikada bir gelen bir otobüsün belli bir zaman anında 
+#bir dakikadan daha geç gelme olasılığı
+
+#ÖRNEK
+#bir durağa 10 dakikada bir otobüs gelmektedir.
+#Poisson : Bir dakika sonra otobüs gelmeme olasılığı nedir?
+#Üstel : Otobüsün gelmesinin bir dakikadan daha uzun sürmesi
+#        olasılığı nedir
+
+#lambda bir dakika için 1/10 olur 
+
+dpois(x = 0 , lambda = 1/10)      #0.90
+
+pexp(q = 1,  rate = 1/10 ,        #0.90
+     lower.tail = F)
+#burada kümülatif toplamdan otobüsün 
+#1 dakikadan daha uzun sürede gelmesi durumu
+
+dexp(x = 1 , rate = 1/10)    #0.08
+#otobüsün 2. dakikada gelme olasılığı
+
+#kümülatif
+pexp( q = 5 , rate = 1/10 ,   #0.60
+      lower.tail = F)
+#5'ten daha uzun dakikalarda otobüs gelme olasılığı
+
+qexp( p = 0.9, rate = 1/10 )    #23.02
+
+#rasgele üstel dağılım oluşturma
+
+rexp(n = 50 , rate = 1/20)
+
+
+
+
+###NORMAL DAĞILIM
+
+#belli bir ortalama ve sapmaya sahip kitleden 
+#elde edilebilecek değerin olasılığını veren dağılım
+
+
+dnorm(x = 25 , mean = 30 , sd = 5)   #0.04
+
+dnorm(x = 30 , mean = 30 , sd = 5)   #0.07
+
+dnorm(x = 35 , mean = 30 , sd = 5)   #0.04
+
+plot( 1:30 , dnorm(x = 1:30 , mean = 15 , sd = 3))  #çan eğrisi
+
+
+#kümülatif toplam 
+
+pnorm(q = 25 , mean = 30 , sd = 5)   #0.15
+
+#ortalama 180 sapma 10 160'dan uzun olma olasılığı
+pnorm(q = 160 , mean = 180 , sd = 10,   #0.97
+      lower.tail = F)
+
+#girilen olasılık değerine göre bir değer öğrenme
+
+qnorm(p = 0.5 , mean = 30 , sd = 5,
+      lower.tail = T)                  #30
+
+#rasgele normal dağılan veri oluşturma
+
+r <- rnorm(n = 100 , mean = 100 , sd = 10)
+
+mean(r)  #99.53
+sd(r)    #10.9
+
